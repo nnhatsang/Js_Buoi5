@@ -112,13 +112,13 @@
       crossorigin="anonymous"
     ></script>
     <script>
-      const kwRates = {
-        50: 500,
-        100: 650,
-        200: 850,
-        350: 1100,
-        351: 1300,
-      };
+      const kwRates = [
+        { maxKW: 50, rate: 500 },
+        { maxKW: 50, rate: 650 },
+        { maxKW: 100, rate: 850 },
+        { maxKW: 150, rate: 1100 },
+        { maxKW: Infinity, rate: 1300 },
+      ];
       document
         .getElementById("btnKetQua")
         .addEventListener("click", function () {
@@ -129,19 +129,19 @@
           if (input2 <= 0) {
             return alert("không hợp lệ");
           }
-          for (const soKW in kwRates) {
-            if (input2 <= soKW) {
-              result += input2 * kwRates[soKW];
+          debugger;
+          for (const soKW of kwRates) {
+            if (input2 <= soKW.maxKW) {
+              result += input2 * soKW.rate;
               break;
             } else {
-              result += input2 * kwRates[soKW];
-              input2 -= soKW;
+              result += soKW.maxKW * soKW.rate;
+              input2 -= soKW.maxKW;
             }
           }
-          if (input2 > 0) {
-            result += input2 * kwRates[350];
-          }
+
           console.log(input1);
+          console.log(result);
           t = new Intl.NumberFormat("vn-VN").format(result);
           document.getElementById("result").innerHTML =
             "Họ tên: " + input1 + "; Tiền điện: " + t;

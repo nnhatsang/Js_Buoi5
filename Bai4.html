@@ -31,50 +31,92 @@
   </head>
 
   <body class="bg-success bg-opacity-50">
-    <!-- Ideally, this is gonna be rendered by backend -->
-    <!-- But still not practical, so I wouldn't recommend this -->
     <div class="container p-2">
-      <h2 style="color: midnightblue">Bài tập chu vi hình chữ nhật</h2>
+      <h2 style="color: midnightblue">Tính thuế thu nhập cá nhân</h2>
       <div class="bg-body rounded-2 bg-opacity-75 p-3">
         <h6>Gợi ý:</h6>
-        <ul>
-          <li>Áp dụng các kiến thức như các bài trước</li>
-          <li>Diện tích: dài x rộng</li>
-          <li>Chu vi: (dài + rộng) x 2</li>
-        </ul>
+        <details>
+          <summary>Mở rộng để xem thêm</summary>
+          <ul>
+            <li>
+              Sử dụng event onchange của dropdown để xử lý ẩn hiện cho ô nhập số
+              kết nối khi chọn loại khách hàng:
+              <a
+                href="https://www.w3schools.com/jsref/event_onchange.asp"
+                target="_blank"
+                >Onchange</a
+              >
+            </li>
+            <li>
+              Đối với loại khách hàng Doanh Nghiệp, tổng 10 kết nối đầu là 75$
+              <br />
+              => đây là giá trọn gói, nếu doanh nghiệp lắp đặt số kết nối nhỏ
+              hơn 10 thì vẫn phải đóng 75$.<br />
+              Vd: 6 kết nối thì vẫn sẽ cộng 75$ vào tổng tiền.<br />
+              => Nếu lắp trên 10 kết nối thì kết nối thứ 11 trở đi sẽ tính
+              5$/kết nối.
+            </li>
+          </ul>
+        </details>
       </div>
       <div class="bg-light p-2 rounded-2 mt-2">
         <div class="row">
           <div class="col-md-12 col-lg-6">
             <div class="mb-3">
-              <label for="" class="form-label">Nhập chieu dai</label>
+              <label for="" class="form-label">Chọn loại khách hàng</label>
+              <select
+                class="form-select"
+                name=""
+                id="optionUser"
+                onchange="enableInput()"
+              >
+                <option value="">Select one</option>
+                <option value="company">Doanh nghiệp</option>
+                <option value="user">Nhà dân</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-12 col-lg-6">
+            <div class="">
               <input
                 type="number"
-                class="form-control"
+                class="form-control mb-3"
                 name=""
-                id="txtDai"
+                id="input1"
                 aria-describedby="helpId"
-                placeholder=""
-                min="0"
-                oninput="ChuVi()"
+                placeholder="Số kết nối"
+                style="display: none"
               />
             </div>
           </div>
           <div class="col-md-12 col-lg-6">
             <div class="mb-3">
-              <label for="" class="form-label">Nhập chiểu rộng</label>
+              <input
+                type="text"
+                class="form-control"
+                name=""
+                id="input3"
+                aria-describedby="helpId"
+                placeholder="Mã khách hàng"
+              />
+            </div>
+          </div>
+          <div class="col-md-12 col-lg-6">
+            <div class="mb-3">
               <input
                 type="number"
                 class="form-control"
                 name=""
-                id="txtRong"
+                id="input3"
                 aria-describedby="helpId"
-                placeholder=""
-                min="0"
-                oninput="ChuVi()"
+                placeholder="Số kênh cao cấp"
               />
             </div>
           </div>
+        </div>
+        <div class="d-flex justify-content-center">
+          <button class="btn btn-success" id="btnKetQua">Kết quả</button>
         </div>
       </div>
       <div
@@ -83,21 +125,18 @@
       ></div>
       <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
-          <li class="page-item">
-            <a class="page-link" href="Bai3.html" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
           <li class="page-item" aria-current="page">
             <a class="page-link" href="index.html">1</a>
           </li>
-          <li class="page-item"><a class="page-link" href="Bai2.html">2</a></li>
-          <li class="page-item"><a class="page-link" href="Bai3.html">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="Bai2.html">2</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="Bai3.html">3</a>
+          </li>
           <li class="page-item active">
             <a class="page-link" href="Bai4.html">4</a>
           </li>
-        
-         
         </ul>
       </nav>
     </div>
@@ -115,19 +154,15 @@
       crossorigin="anonymous"
     ></script>
     <script>
-      function ChuVi() {
-        var chieuDai = parseFloat(document.getElementById("txtDai").value);
-        var chieuRong = parseFloat(document.getElementById("txtRong").value);
-
-        if (!isNaN(chieuDai) && !isNaN(chieuRong)) {
-          var chuVi = 2 * (chieuDai + chieuRong);
-          var dienTich = chieuDai * chieuRong;
-          document.getElementById(
-            "result"
-          ).innerHTML = `Chu vi ${chuVi} | Diện tích: ${dienTich}`;
-        } else {
-          document.getElementById("result").innerHTML = "Nhập sai giá trị";
-        }
+      function enableInput() {
+        console.log("hello");
+        var e = document.getElementById("optionUser").value;
+        document.getElementById("input1").style.display =
+          "company" == e ? "block" : "none";
+      }
+      function sumMoney(hd, dv, kenh, giakenh, kn, giakn) {
+        var s = hd + dv + kenh * giakenh;
+        return kn < 10 ? kn * giakn + s : (s += (kn - 10) * giakn);
       }
     </script>
   </body>
