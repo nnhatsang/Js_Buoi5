@@ -97,6 +97,7 @@
                 id="input2"
                 aria-describedby="helpId"
                 placeholder="Tổng thu nhập năm"
+                onchange="formatCurrency(this)"
               />
             </div>
           </div>
@@ -126,10 +127,12 @@
           <li class="page-item" aria-current="page">
             <a class="page-link" href="index.html">1</a>
           </li>
-          <li class="page-item ">
+          <li class="page-item">
             <a class="page-link" href="Bai2.html">2</a>
           </li>
-          <li class="page-item active"><a class="page-link" href="Bai3.html">3</a></li>
+          <li class="page-item active">
+            <a class="page-link" href="Bai3.html">3</a>
+          </li>
           <li class="page-item"><a class="page-link" href="Bai4.html">4</a></li>
 
           <li class="page-item">
@@ -157,28 +160,36 @@
       document
         .getElementById("btnKetQua")
         .addEventListener("click", function () {
-          var input1 = document.getElementById("input1").value,
-            input2 = Number(document.getElementById("input2").value),
-            input3 = Number(document.getElementById("input3").value);
-          if (input2 <= 0) {
-            return alert("không hợp lệ");
+          var e = document.getElementById("input1").value,
+            n =
+              document.getElementById("input2").value -
+              4e6 -
+              16e5 * document.getElementById("input3").value,
+            t = 0;
+          console.log(n);
+          debugger;
+          if (n > 0 && n <= 6e7) {
+            t = 0.05 * n;
+          } else if (n > 6e7 && n <= 12e7) {
+            t = 0.1 * n;
+          } else if (n > 12e7 && n <= 21e7) {
+            t = 0.15 * n;
+          } else if (n > 21e7 && n <= 384e6) {
+            t = 0.2 * n;
+          } else if (n > 384e6 && n <= 624e6) {
+            t = 0.25 * n;
+          } else if (n > 624e6 && n <= 96e7) {
+            t = 0.3 * n;
+          } else if (n > 96e7) {
+            t = 0.35 * n;
+          } else {
+            alert("Số tiền thu nhập cần trên 10tr để có thể tính thuế");
+            return;
           }
-          for (const soKW in kwRates) {
-            if (input2 <= soKW) {
-              result += input2 * kwRates[soKW];
-              break;
-            } else {
-              result += input2 * kwRates[soKW];
-              input2 -= soKW;
-            }
-          }
-          if (input2 > 0) {
-            result += input2 * kwRates[350];
-          }
-          console.log(input1);
-          t = new Intl.NumberFormat("vn-VN").format(result);
+
+          t = new Intl.NumberFormat("vn-VN").format(t);
           document.getElementById("result").innerHTML =
-            "Họ tên: " + input1 + "; Tiền điện: " + t;
+            "Họ tên: " + e + "; Tiền thuế thu nhập cá nhân: " + t + " VND";
         });
     </script>
   </body>
