@@ -26,8 +26,6 @@
     />
 
     <!-- (Optional) Use CSS or JS implementation -->
-
-    <link rel="stylesheet" href="style.css" />
   </head>
 
   <body class="bg-success bg-opacity-50">
@@ -77,14 +75,13 @@
             </div>
           </div>
 
-      
           <div class="col-md-12 col-lg-6">
             <div class="mb-3">
               <input
                 type="text"
                 class="form-control"
                 name=""
-                id="input3"
+                id="inputId"
                 aria-describedby="helpId"
                 placeholder="Mã khách hàng"
               />
@@ -96,21 +93,21 @@
                 type="number"
                 class="form-control"
                 name=""
-                id="input3"
+                id="soKetNoi"
                 aria-describedby="helpId"
-                placeholder="Số kênh cao cấp"
+                placeholder="Số kết nối"
               />
             </div>
           </div>
-              <div class="col-md-12 col-lg-6">
-            <div class="">
+          <div class="col-md-12 col-lg-6">
+            <div class="mb-3">
               <input
                 type="number"
-                class="form-control mb-3"
+                class="form-control"
                 name=""
-                id="input1"
+                id="inputChannel"
                 aria-describedby="helpId"
-                placeholder="Số kết nối"
+                placeholder="Số kênh cao cấp"
                 style="display: none"
               />
             </div>
@@ -158,12 +155,46 @@
       function enableInput() {
         console.log("hello");
         var e = document.getElementById("optionUser").value;
-        document.getElementById("input1").style.display =
+        document.getElementById("inputChannel").style.display =
           "company" == e ? "block" : "none";
       }
+      document
+        .getElementById("btnKetQua")
+        .addEventListener("click", function () {
+          var customerType = document.getElementById("optionUser").value,
+            customerID = document.getElementById("inputId").value,
+            numberOfChannels = document.getElementById("inputChannel").value,
+            numberOfConnections = document.getElementById("soKetNoi").value,
+            toTal = 0;
+          if (customerType == "company") {
+            cableCost = sumMoney(
+              15,
+              75,
+              50,
+              numberOfConnections,
+              numberOfChannels,
+              5
+            );
+          } else if (customerType == "user") {
+            cableCost = sumMoney(4.5, 20.5, 7.5, numberOfConnections, 0, 0);
+          } else {
+            document.getElementById("result").innerHTML =
+              "Hãy chọn loại khách hàng";
+            return;
+          }
+          document.getElementById("result").innerHTML =
+            "Mã khách hàng: " +
+            customerID +
+            "; Tiền cáp: " +
+            new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+            }).format(cableCost);
+        });
+
       function sumMoney(hd, dv, kenh, giakenh, kn, giakn) {
         var s = hd + dv + kenh * giakenh;
-        return kn < 10 ? kn * giakn + s : (s += (kn - 10) * giakn);
+        return kn > 10 && (s += (kn - 10) * giakn), s;
       }
     </script>
   </body>
